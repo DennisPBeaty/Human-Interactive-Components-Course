@@ -27,22 +27,22 @@ void loop() {
     digitalWrite(red_led, LOW);
     Serial.println("Blue");
   } else if (lightValue < 200) {
-    digitalWrite(blue_led, LOW);
+    digitalWrite(blue_led, HIGH);
     digitalWrite(green_led, HIGH);
     digitalWrite(yellow_led, LOW);
     digitalWrite(red_led, LOW);
     Serial.println("Green");
   } else if (lightValue < 500) {
-    digitalWrite(blue_led, LOW);
-    digitalWrite(green_led, LOW);
+    digitalWrite(blue_led, HIGH);
+    digitalWrite(green_led, HIGH);
     digitalWrite(yellow_led, LOW);
     digitalWrite(red_led, HIGH);
     Serial.println("Red");
   } else if (lightValue < 800) {
-    digitalWrite(blue_led, LOW);
-    digitalWrite(green_led, LOW);
+    digitalWrite(blue_led, HIGH);
+    digitalWrite(green_led, HIGH);
     digitalWrite(yellow_led, HIGH);
-    digitalWrite(red_led, LOW);
+    digitalWrite(red_led, HIGH);
     Serial.println("Yellow");
   }
 }
