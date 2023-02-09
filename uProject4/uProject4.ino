@@ -20,7 +20,7 @@ void loop() {
 
   int lightValue = analogRead(lightSensor);
   
-  if (lightValue < 30) {
+  if (lightValue < 150) {
     digitalWrite(blue_led, HIGH);
     digitalWrite(green_led, LOW);
     digitalWrite(yellow_led, LOW);
