@@ -175,9 +175,12 @@ void loop() {
   // put your main code here, to run repeatedly:
   int score = 0;
   int option = 0;
+
+  readValues();
+  int time = map(potVal, 0, 1023, 1, 5);
   
   if (playing) {
-    if (millis() < minutes * 1) {
+    if (millis() < minutes * time) {
       
       bool newVal = false;
       while (!newVal) {
@@ -235,8 +238,8 @@ void loop() {
     }
   }
   else {
+    readValues();
     Serial.println(score);
-    forceRead();
     if (forceVal >= 100) {
       playing = true;
     }
