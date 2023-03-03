@@ -56,7 +56,12 @@ void forcePrint() {
   Serial.println(forceVal);
 }
 
+int randomOption() {
+  return random(1,5);
+}
+
 const int buzzer = 3;
+int score = 0;
 
 void setup() {
   // put your setup code here, to run once:
@@ -123,11 +128,57 @@ void playSound() {
 // 7: 6
 // 8: 7
 
-
-void loop() {
-  // put your main code here, to run repeatedly:
+void readValues() {
   readDistance();
   potRead();
   forceRead();
-  lightFour();
+}
+
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  int option = randomOption();
+  bool correct = false; 
+
+  while (!correct) {
+    if (option == 1) {
+      lightOne();
+      readValues();
+      if (0 <= distance && distance <= 5) {
+          score++;
+          playSound();
+          correct = true;    
+      }
+    }
+    else if (option == 2) {
+      lightTwo();
+      readValues();
+      if (5 < distance && distance <= 9) {
+          score++;
+          playSound();
+          correct = true;    
+      }
+    }
+    else if (option == 3) {
+      lightThree();
+      readValues();
+      if (9 < distance && distance <= 14) {
+          score++;
+          playSound();
+          correct = true;    
+      }
+    }
+    else if (option == 4) {
+      lightFour();
+      readValues();
+      if (14 < distance) {
+          score++;
+          playSound();
+          correct = true;    
+      }
+    }
+  }
+
+  lightNone();
+  Serial.println(score);
 }
