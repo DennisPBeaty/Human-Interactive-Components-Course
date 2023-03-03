@@ -168,6 +168,7 @@ void readValues() {
 int pastOption = 0;
 unsigned long minutes = 6000;
 bool playing = true;
+int score = 0;
 
 //we want game to range between length of 1-5
 
@@ -241,11 +242,11 @@ void loop() {
     Serial.println(score);
     if (forceVal >= 100) {
       playing = true;
+      score = 0;
     }
     noInterrupts ();
     timer0_millis = 0;
     interrupts ();
-    int score = 0;
   }
 }
   
