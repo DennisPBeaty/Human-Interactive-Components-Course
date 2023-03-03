@@ -90,6 +90,17 @@ void lightNone() {
   digitalWrite(7, LOW);
 }
 
+void lightAll() {
+  digitalWrite(A5, HIGH);
+  digitalWrite(A4, HIGH);
+  digitalWrite(A3, HIGH);
+  digitalWrite(A2, HIGH);
+  digitalWrite(4, HIGH);
+  digitalWrite(5, HIGH);
+  digitalWrite(6, HIGH);
+  digitalWrite(7, HIGH);
+}
+
 void lightOne() {
   digitalWrite(A5, HIGH);
   digitalWrite(A4, HIGH);
@@ -118,6 +129,26 @@ void playSound() {
   noTone(buzzer);  
 }
 
+void endSound() {
+  tone(buzzer, 500);
+  delay(250);
+  tone(buzzer, 750);
+  delay(250);
+  tone(buzzer, 1000);
+  delay(250);
+  tone(buzzer, 1250);
+  delay(250);
+  tone(buzzer, 1500);
+  delay(250);
+  tone(buzzer, 1750);
+  delay(250);
+  tone(buzzer, 2000);
+  delay(250);
+  tone(buzzer, 2250);
+  delay(250);
+  noTone(buzzer);  
+}
+
 // For the Lights
 // 1: A5
 // 2: A4
@@ -134,51 +165,62 @@ void readValues() {
   forceRead();
 }
 
+int pastOption = 0;
 
 void loop() {
   // put your main code here, to run repeatedly:
-  int option = randomOption();
-  bool correct = false; 
+  bool newVal = false;
+  int option = false;
 
-  while (!correct) {
-    if (option == 1) {
-      lightOne();
-      readValues();
-      if (0 <= distance && distance <= 5) {
-          score++;
-          playSound();
-          correct = true;    
-      }
-    }
-    else if (option == 2) {
-      lightTwo();
-      readValues();
-      if (5 < distance && distance <= 9) {
-          score++;
-          playSound();
-          correct = true;    
-      }
-    }
-    else if (option == 3) {
-      lightThree();
-      readValues();
-      if (9 < distance && distance <= 14) {
-          score++;
-          playSound();
-          correct = true;    
-      }
-    }
-    else if (option == 4) {
-      lightFour();
-      readValues();
-      if (14 < distance) {
-          score++;
-          playSound();
-          correct = true;    
-      }
+  while (!newVal) {
+    option = randomOption();
+    if (option != pastOption) {
+        pastOption = option;
+        newVal = true;
     }
   }
+  bool correct = false;
+  
+    while (!correct) {
+      if (option == 1) {
+        lightOne();
+        readValues();
+        if (0 <= distance && distance <= 5) {
+            score++;
+            playSound();
+            correct = true;    
+        }
+      }
+      else if (option == 2) {
+        lightTwo();
+        readValues();
+        if (5 < distance && distance <= 9) {
+            score++;
+            playSound();
+            correct = true;    
+        }
+      }
+      else if (option == 3) {
+        lightThree();
+        readValues();
+        if (9 < distance && distance <= 14) {
+            score++;
+            playSound();
+            correct = true;    
+        }
+      }
+      else if (option == 4) {
+        lightFour();
+        readValues();
+        if (14 < distance) {
+            score++;
+            playSound();
+            correct = true;    
+        }
+      }
+    }
+    lightNone();
 
-  lightNone();
+  endSound();
   Serial.println(score);
 }
