@@ -174,6 +174,7 @@ bool playing = true;
 void loop() {
   // put your main code here, to run repeatedly:
 
+  int option = 0;
   readValues();
   int time = map(potVal, 0, 1023, 1, 5);
   
@@ -245,7 +246,6 @@ void loop() {
     timer0_millis = 0;
     interrupts ();
     int score = 0;
-    int option = 0;
   }
 }
   
