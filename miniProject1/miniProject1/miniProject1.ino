@@ -59,9 +59,9 @@ void forcePrint() {
 int randomOption() {
   return random(1,5);
 }
-
 const int buzzer = 3;
-int score = 0;
+
+extern volatile unsigned long timer0_millis;
 
 void setup() {
   // put your setup code here, to run once:
@@ -166,61 +166,83 @@ void readValues() {
 }
 
 int pastOption = 0;
+unsigned long minutes = 6000;
+bool playing = true;
+
+//we want game to range between length of 1-5
 
 void loop() {
   // put your main code here, to run repeatedly:
-  bool newVal = false;
-  int option = false;
-
-  while (!newVal) {
-    option = randomOption();
-    if (option != pastOption) {
-        pastOption = option;
-        newVal = true;
+  int score = 0;
+  int option = 0;
+  
+  if (playing) {
+    if (millis() < minutes * 1) {
+      
+      bool newVal = false;
+      while (!newVal) {
+        option = randomOption();
+        if (option != pastOption) {
+            pastOption = option;
+            newVal = true;
+        }
+      }
+      bool correct = false;
+      
+      while (!correct) {
+        if (option == 1) {
+          lightOne();
+          readValues();
+          if (0 <= distance && distance <= 5) {
+              score++;
+              playSound();
+              correct = true;    
+          }
+        }
+        else if (option == 2) {
+          lightTwo();
+          readValues();
+          if (5 < distance && distance <= 9) {
+              score++;
+              playSound();
+              correct = true;    
+          }
+        }
+        else if (option == 3) {
+          lightThree();
+          readValues();
+          if (9 < distance && distance <= 14) {
+              score++;
+              playSound();
+              correct = true;    
+          }
+        }
+        else if (option == 4) {
+          lightFour();
+          readValues();
+          if (14 < distance) {
+              score++;
+              playSound();
+              correct = true;    
+          }
+        }
+      }
+      lightNone();
+    }
+    else {
+      endSound();
+      playing = false;
     }
   }
-  bool correct = false;
-  
-    while (!correct) {
-      if (option == 1) {
-        lightOne();
-        readValues();
-        if (0 <= distance && distance <= 5) {
-            score++;
-            playSound();
-            correct = true;    
-        }
-      }
-      else if (option == 2) {
-        lightTwo();
-        readValues();
-        if (5 < distance && distance <= 9) {
-            score++;
-            playSound();
-            correct = true;    
-        }
-      }
-      else if (option == 3) {
-        lightThree();
-        readValues();
-        if (9 < distance && distance <= 14) {
-            score++;
-            playSound();
-            correct = true;    
-        }
-      }
-      else if (option == 4) {
-        lightFour();
-        readValues();
-        if (14 < distance) {
-            score++;
-            playSound();
-            correct = true;    
-        }
-      }
+  else {
+    Serial.println(score);
+    forceRead();
+    if (forceVal >= 100) {
+      playing = true;
     }
-    lightNone();
-
-  endSound();
-  Serial.println(score);
+    noInterrupts ();
+    timer0_millis = 0;
+    interrupts ();
+  }
 }
+  
