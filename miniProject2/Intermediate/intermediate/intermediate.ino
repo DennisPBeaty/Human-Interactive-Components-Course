@@ -2,7 +2,6 @@ const int button1 = 12;
 
 int prevState1 = HIGH; 
 int state1;
-uint8_t buf[8] = {0}; //Keyboard timing buffer.
 
 void setup() {
   pinMode(button1, INPUT_PULLUP);
