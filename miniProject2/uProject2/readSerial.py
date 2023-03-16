@@ -37,3 +37,4 @@ while True:
         if re.search('C', packet.decode('utf').rstrip('\n')):
             keyboard.press('c')
             keyboard.release('c')
+    
