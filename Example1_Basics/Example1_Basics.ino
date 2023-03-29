@@ -29,9 +29,12 @@ ICM_20948_SPI myICM; // If using SPI create an ICM_20948_SPI object
 ICM_20948_I2C myICM; // Otherwise create an ICM_20948_I2C object
 #endif
 
+int motorPin = D9;
+
 void setup()
 {
-
+  ledcAttachPin(motorPin, OUTPUT);
+  ledcWrite(motorPin, 0);
   SERIAL_PORT.begin(115200);
   while (!SERIAL_PORT)
   {
@@ -73,6 +76,8 @@ void setup()
 void loop()
 {
 
+  ledcWrite(motorPin, 0);
+
   if (myICM.dataReady())
   {
     myICM.getAGMT();         // The values are only updated when you call 'getAGMT'
@@ -85,6 +90,8 @@ void loop()
     SERIAL_PORT.println("Waiting for data");
     delay(500);
   }
+
+  
 }
 
 // Below here are some helper functions to print the data nicely!
@@ -142,21 +149,7 @@ void printRawAGMT(ICM_20948_AGMT_t agmt)
   printPaddedInt16b(agmt.acc.axes.y);
   SERIAL_PORT.print(", ");
   printPaddedInt16b(agmt.acc.axes.z);
-  SERIAL_PORT.print(" ], Gyr [ ");
-  printPaddedInt16b(agmt.gyr.axes.x);
-  SERIAL_PORT.print(", ");
-  printPaddedInt16b(agmt.gyr.axes.y);
-  SERIAL_PORT.print(", ");
-  printPaddedInt16b(agmt.gyr.axes.z);
-  SERIAL_PORT.print(" ], Mag [ ");
-  printPaddedInt16b(agmt.mag.axes.x);
-  SERIAL_PORT.print(", ");
-  printPaddedInt16b(agmt.mag.axes.y);
-  SERIAL_PORT.print(", ");
-  printPaddedInt16b(agmt.mag.axes.z);
-  SERIAL_PORT.print(" ], Tmp [ ");
-  printPaddedInt16b(agmt.tmp.val);
-  SERIAL_PORT.print(" ]");
+
   SERIAL_PORT.println();
 }
 
