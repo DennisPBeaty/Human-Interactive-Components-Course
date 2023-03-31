@@ -9,9 +9,12 @@
  *
  * Distributed as-is; no warranty is given.
  ***************************************************************/
+#include <Servo.h>
 #include "ICM_20948.h" // Click here to get the library: http://librarymanager/All#SparkFun_ICM_20948_IMU
 
 //#define USE_SPI       // Uncomment this to use SPI
+
+Servo myservo;
 
 #define SERIAL_PORT Serial
 
@@ -29,12 +32,9 @@ ICM_20948_SPI myICM; // If using SPI create an ICM_20948_SPI object
 ICM_20948_I2C myICM; // Otherwise create an ICM_20948_I2C object
 #endif
 
-int motorPin = D9;
-
 void setup()
 {
-  ledcAttachPin(motorPin, OUTPUT);
-  ledcWrite(motorPin, 0);
+  myservo.attach(9);
   SERIAL_PORT.begin(115200);
   while (!SERIAL_PORT)
   {
@@ -75,13 +75,12 @@ void setup()
 
 void loop()
 {
-
-  ledcWrite(motorPin, 0);
-
+  myservo.write(180);
+  delay(15);
   if (myICM.dataReady())
   {
     myICM.getAGMT();         // The values are only updated when you call 'getAGMT'
-                             //    printRawAGMT( myICM.agmt );     // Uncomment this to see the raw values, taken directly from the agmt structure
+    
     printScaledAGMT(&myICM); // This function takes into account the scale settings from when the measurement was made to calculate the values with units
     delay(30);
   }
@@ -201,26 +200,20 @@ void printScaledAGMT(ICM_20948_SPI *sensor)
 void printScaledAGMT(ICM_20948_I2C *sensor)
 {
 #endif
+  if (sensor->accX() < -00600) {
+      myservo.write(0);
+      delay(1500);
+      myservo.write(180);
+      delay(1500);
+    }
+
+
   SERIAL_PORT.print("Scaled. Acc (mg) [ ");
   printFormattedFloat(sensor->accX(), 5, 2);
   SERIAL_PORT.print(", ");
   printFormattedFloat(sensor->accY(), 5, 2);
   SERIAL_PORT.print(", ");
   printFormattedFloat(sensor->accZ(), 5, 2);
-  SERIAL_PORT.print(" ], Gyr (DPS) [ ");
-  printFormattedFloat(sensor->gyrX(), 5, 2);
-  SERIAL_PORT.print(", ");
-  printFormattedFloat(sensor->gyrY(), 5, 2);
-  SERIAL_PORT.print(", ");
-  printFormattedFloat(sensor->gyrZ(), 5, 2);
-  SERIAL_PORT.print(" ], Mag (uT) [ ");
-  printFormattedFloat(sensor->magX(), 5, 2);
-  SERIAL_PORT.print(", ");
-  printFormattedFloat(sensor->magY(), 5, 2);
-  SERIAL_PORT.print(", ");
-  printFormattedFloat(sensor->magZ(), 5, 2);
-  SERIAL_PORT.print(" ], Tmp (C) [ ");
-  printFormattedFloat(sensor->temp(), 5, 2);
   SERIAL_PORT.print(" ]");
   SERIAL_PORT.println();
 }
