@@ -32,8 +32,11 @@ ICM_20948_SPI myICM; // If using SPI create an ICM_20948_SPI object
 ICM_20948_I2C myICM; // Otherwise create an ICM_20948_I2C object
 #endif
 
+int motorControl=8;
+
 void setup()
 {
+  pinMode(motorControl,OUTPUT);
   myservo.attach(9);
   SERIAL_PORT.begin(115200);
   while (!SERIAL_PORT)
@@ -75,8 +78,7 @@ void setup()
 
 void loop()
 {
-  myservo.write(180);
-  delay(15);
+
   if (myICM.dataReady())
   {
     myICM.getAGMT();         // The values are only updated when you call 'getAGMT'
@@ -200,14 +202,21 @@ void printScaledAGMT(ICM_20948_SPI *sensor)
 void printScaledAGMT(ICM_20948_I2C *sensor)
 {
 #endif
-  if (sensor->accX() < -00600) {
+  if (sensor->accX() < -00700) {
       myservo.write(0);
       delay(1500);
+    }
+  if (sensor->accX() > 00700) {
       myservo.write(180);
       delay(1500);
     }
-
-
+  if (sensor->accY() < -00700) {
+      analogWrite(motorControl, 0);
+    }
+  if (sensor->accY() > 00700) {
+      analogWrite(motorControl, 255);
+    }
+      
   SERIAL_PORT.print("Scaled. Acc (mg) [ ");
   printFormattedFloat(sensor->accX(), 5, 2);
   SERIAL_PORT.print(", ");
