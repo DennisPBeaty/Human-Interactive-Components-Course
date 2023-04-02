@@ -202,14 +202,10 @@ void printScaledAGMT(ICM_20948_SPI *sensor)
 void printScaledAGMT(ICM_20948_I2C *sensor)
 {
 #endif
-  if (sensor->accX() < -00700) {
-      myservo.write(0);
-      delay(1500);
-    }
-  if (sensor->accX() > 00700) {
-      myservo.write(180);
-      delay(1500);
-    }
+
+  int val = map(sensor->accX(), -1000, 1000, 0, 180);
+  myservo.write(val);
+    
   if (sensor->accY() < -00700) {
       analogWrite(motorControl, 0);
     }
