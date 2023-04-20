@@ -24,9 +24,6 @@ def get_color_name(requested_color):
         actual_name = None
     return actual_name, closest_name
 
-requested_color = (119, 172, 152)
-actual_name, closest_name = get_color_name(requested_color)
-
 openPorts = serial.tools.list_ports.comports()
 serialInst = serial.Serial()
 
