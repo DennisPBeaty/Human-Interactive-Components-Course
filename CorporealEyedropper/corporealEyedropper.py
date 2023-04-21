@@ -52,17 +52,17 @@ while True:
         packet = serialInst.readline()
 
         result = packet.decode('utf').rstrip('\n')
+        print(result)
+        # if re.search('ACTIVATE', result):
+        #     dummy, name = get_color_name((rgb[0], rgb[1], rgb[2]))
+        #     hex = rgb_to_hex(rgb[0], rgb[1], rgb[2])
+        #     result = "The color you have selected is called " + name + ". This color has a red value of " + str(rgb[0]) + ", a green value of " + str(rgb[1]) + ", and a blue value of " + str(rgb[2]) + ". The hex value of this colors is " + str(hex)
 
-        if re.search('ACTIVATE', result):
-            dummy, name = get_color_name((rgb[0], rgb[1], rgb[2]))
-            hex = rgb_to_hex(rgb[0], rgb[1], rgb[2])
-            result = "The color you have selected is called " + name + ". This color has a red value of " + str(rgb[0]) + ", a green value of " + str(rgb[1]) + ", and a blue value of " + str(rgb[2]) + ". The hex value of this colors is " + str(hex)
+        #     engine = pyttsx3.init()
+        #     engine.say(result)
+        #     engine.runAndWait()
 
-            engine = pyttsx3.init()
-            engine.say(result)
-            engine.runAndWait()
-
-        elif (re.search('Red', result)) :
-            rgb = [int(i) for i in (result).split() if i.isdigit()]
-            print("r: " + str(rgb[0]) + ', g: ' + str(rgb[1]) + ', b: ' + str(rgb[2]))
+        # elif (re.search('Red', result)) :
+        #     rgb = [int(i) for i in (result).split() if i.isdigit()]
+        #     print("r: " + str(rgb[0]) + ', g: ' + str(rgb[1]) + ', b: ' + str(rgb[2]))
     

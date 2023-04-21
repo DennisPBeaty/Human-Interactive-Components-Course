@@ -1,10 +1,8 @@
-// Define color sensor pins
-#define S0 4
-#define S1 5
-#define S2 6
-#define S3 7
-#define sensorOut 8
-
+#define S0 1
+#define S1 25
+#define S2 26
+#define S3 27
+#define sensorOut 9
 // Variables for Color Pulse Width Measurements
 int redPW = 0;
 int greenPW = 0;
@@ -25,7 +23,7 @@ void setup() {
   pinMode(sensorOut, INPUT);
 
   // Setup Serial Monitor
-  Serial.begin(9600);
+  Serial.begin(115200);
 }
 
 void loop() {

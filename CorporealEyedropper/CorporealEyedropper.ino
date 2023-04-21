@@ -1,9 +1,9 @@
-#define BUTTON_PIN 26
-#define S0 27
-#define S1 9
-#define S2 10
-#define S3 13
-#define sensorOut 5
+#define BUTTON_PIN 3
+#define S0 1
+#define S1 25
+#define S2 26
+#define S3 27
+#define sensorOut 9
 
 #include "BluetoothSerial.h"
  
@@ -11,12 +11,12 @@ BluetoothSerial SerialBT;
 
 // Calibration Values
 // *Get these from Calibration Sketch
-int redMin = 18; // Red minimum value
-int redMax = 172; // Red maximum value
-int greenMin = 19; // Green minimum value
-int greenMax = 175; // Green maximum value
-int blueMin = 15; // Blue minimum value
-int blueMax = 135; // Blue maximum value
+int redMin = 0; // Red minimum value
+int redMax = 255; // Red maximum value
+int greenMin = 3; // Green minimum value
+int greenMax = 77; // Green maximum value
+int blueMin = 3; // Blue minimum value
+int blueMax = 78; // Blue maximum value
 
 // Variables for Color Pulse Width Measurements
 int redPW = 0;
@@ -46,7 +46,8 @@ void setup() {
   pinMode(BUTTON_PIN, INPUT_PULLUP);
 
   // Setup Serial Monitor
-  SerialBT.begin("Corporeal Eyedropper");
+  //SerialBT.begin("Corporeal Eyedropper");
+  Serial.begin(115200);
 }
 
 void loop() {
@@ -72,15 +73,15 @@ void loop() {
   delay(200);
 
   // Print output to Serial Monitor
-  SerialBT.print("Red = ");
-  SerialBT.print(redValue);
-  SerialBT.print(" - Green = ");
-  SerialBT.print(greenValue);
-  SerialBT.print(" - Blue = ");
-  SerialBT.println(blueValue);
+  Serial.print("Red = ");
+  Serial.print(redValue);
+  Serial.print(" - Green = ");
+  Serial.print(greenValue);
+  Serial.print(" - Blue = ");
+  Serial.println(blueValue);
 
   if (digitalRead(BUTTON_PIN) == 0) {
-    SerialBT.println("ACTIVATE");  
+    Serial.println("ACTIVATE");  
   }
 }
 
