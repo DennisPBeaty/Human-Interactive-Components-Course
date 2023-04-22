@@ -41,7 +41,7 @@ for port in openPorts:
     ans = ans+ '\n '+ str(port)
 
 ROOT = tk.Tk()
-
+ROOT.title('Corporeal Eyedropper')
 ROOT.withdraw()
 # the input dialog
 portSelect = simpledialog.askstring(title="Port Select",
@@ -80,6 +80,11 @@ def onclick():
     clip.clipboard_append(color_entry.get())
     clip.destroy()
 
+def playSoundFunc():
+    engine = pyttsx3.init()
+    engine.say('The color you have selected is called' + color_name.cget("text") + '. It has a red value of ' + str(red_scale.get()) + ', a green value of ' + str(green_scale.get()) + ', and a blue value of ' + str(blue_scale.get()) + '. The hexadecimal value is ' + color_entry.get())
+    engine.runAndWait()
+
 def startscan() :
     breaker = True
     rgb = []
@@ -88,11 +93,9 @@ def startscan() :
             packet = serialInst.readline()
 
             result = packet.decode('utf').rstrip('\n')
-            print(result)
             if re.search('ACTIVATE', result):
                 dummy, name = get_color_name((rgb[0], rgb[1], rgb[2]))
                 hex = rgb_to_hex(rgb[0], rgb[1], rgb[2])
-                result = "The color you have selected is called " + name + ". This color has a red value of " + str(rgb[0]) + ", a green value of " + str(rgb[1]) + ", and a blue value of " + str(rgb[2]) + ". The hex value of this colors is " + str(hex)
 
                 color_name.config(text= name)
                 red_scale.set(rgb[0])
@@ -101,9 +104,7 @@ def startscan() :
 
                 scale(1)
                 breaker = False
-                # engine = pyttsx3.init()
-                # engine.say(result)
-                # engine.runAndWait()
+                
 
             elif (re.search('Red', result)) :
                 rgb = [int(i) for i in (result).split() if i.isdigit()]
@@ -114,7 +115,8 @@ col1 = "#feffff"
 col2 = "#004338"
 
 window = Tk()
-window.geometry("650x205")
+window.title('Corporeal Eyedropper')
+window.geometry("700x205")
 window.configure(bg=col1)
 window.resizable(width=False, height=False)
 
@@ -157,8 +159,11 @@ copy_button.grid(row=0, column=2, padx=5)
 copy_button = Button(down_frame, text="Start Scan", bg=col1, width= 12, font=("Ivy", 10, "bold"), command= startscan)
 copy_button.grid(row=0, column=3, padx=5)
 
+play_button = Button(down_frame, text="▶️", bg=col1, width= 3, font=("Ivy", 10, "bold"), command= playSoundFunc)
+play_button.grid(row=0, column=4, padx=5)
+
 color_name = Label(down_frame, text = "Color Name Here", bg= col1, font=("Ivy", 15, "bold"))
-color_name.grid(row=0, column=4)
+color_name.grid(row=0, column=5)
 
 window.mainloop()
 
